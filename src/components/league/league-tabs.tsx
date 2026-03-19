@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { StandingsTable } from "@/components/league/standings-table";
 import { MatchCard } from "@/components/match/match-card";
@@ -31,8 +32,10 @@ export function LeagueTabs({
     league.bracketType === "single_elimination" ||
     league.bracketType === "double_elimination";
 
+  const [tab, setTab] = useState(defaultTab ?? (hasStandings ? "standings" : "schedule"));
+
   return (
-    <Tabs defaultValue={defaultTab ?? (hasStandings ? "standings" : "schedule")}>
+    <Tabs value={tab} onValueChange={setTab}>
       <TabsList variant="line">
         <TabsTrigger value="standings">Standings</TabsTrigger>
         <TabsTrigger value="schedule">Schedule</TabsTrigger>
