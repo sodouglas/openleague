@@ -50,7 +50,10 @@ export function getLeaguesByOrg(orgId: string) {
   return leagues.filter((l) => l.orgId === orgId);
 }
 
-export function getLeagueBySlug(slug: string) {
+export function getLeagueBySlug(slug: string, orgId?: string) {
+  if (orgId) {
+    return leagues.find((l) => l.slug === slug && l.orgId === orgId);
+  }
   return leagues.find((l) => l.slug === slug);
 }
 

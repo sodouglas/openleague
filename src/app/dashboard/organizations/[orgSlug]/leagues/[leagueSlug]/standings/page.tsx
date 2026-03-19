@@ -25,7 +25,7 @@ export default async function StandingsPage({
   const org = getOrgBySlug(orgSlug);
   if (!org) notFound();
 
-  const league = getLeagueBySlug(leagueSlug);
+  const league = getLeagueBySlug(leagueSlug, org.id);
   if (!league || league.orgId !== org.id) notFound();
 
   const leagueStandings = getStandingsByLeague(league.id);

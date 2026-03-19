@@ -25,7 +25,7 @@ export default async function TeamsPage({
   const org = getOrgBySlug(orgSlug);
   if (!org) notFound();
 
-  const league = getLeagueBySlug(leagueSlug);
+  const league = getLeagueBySlug(leagueSlug, org.id);
   if (!league || league.orgId !== org.id) notFound();
 
   const leagueTeams = getTeamsByLeague(league.id);

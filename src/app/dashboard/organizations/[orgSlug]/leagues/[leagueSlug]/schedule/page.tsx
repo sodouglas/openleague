@@ -26,7 +26,7 @@ export default async function SchedulePage({
   const org = getOrgBySlug(orgSlug);
   if (!org) notFound();
 
-  const league = getLeagueBySlug(leagueSlug);
+  const league = getLeagueBySlug(leagueSlug, org.id);
   if (!league || league.orgId !== org.id) notFound();
 
   const allMatches = getMatchesByLeague(league.id);

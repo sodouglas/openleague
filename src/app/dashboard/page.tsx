@@ -12,9 +12,41 @@ import { Calendar, Swords, TrendingUp, ChevronRight } from "lucide-react";
 import { formatDate, formatTime } from "@/lib/formatting";
 import Link from "next/link";
 
+function getWeekLabel(date: Date, now: Date): string {
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dayOfWeek = startOfToday.getDay();
+  const startOfThisWeek = new Date(startOfToday);
+  startOfThisWeek.setDate(startOfToday.getDate() - dayOfWeek);
+
+  const startOfNextWeek = new Date(startOfThisWeek);
+  startOfNextWeek.setDate(startOfThisWeek.getDate() + 7);
+
+  const endOfNextWeek = new Date(startOfNextWeek);
+  endOfNextWeek.setDate(startOfNextWeek.getDate() + 7);
+
+  if (date >= startOfThisWeek && date < startOfNextWeek) return "This Week";
+  if (date >= startOfNextWeek && date < endOfNextWeek) return "Next Week";
+  return "Later";
+}
+
 export default function DashboardPage() {
   const teams = getUserTeams(currentUser.id);
-  const upcoming = getUserUpcomingMatches(currentUser.id);
+  const allUpcoming = getUserUpcomingMatches(currentUser.id);
+
+  const now = new Date("2026-03-19T12:00:00");
+  const twoWeeksOut = new Date(now);
+  twoWeeksOut.setDate(twoWeeksOut.getDate() + 14);
+
+  const upcoming = allUpcoming.filter(
+    (item) => new Date(item.match.scheduledAt) <= twoWeeksOut
+  );
+
+  const grouped = new Map<string, typeof upcoming>();
+  for (const item of upcoming) {
+    const label = getWeekLabel(new Date(item.match.scheduledAt), now);
+    if (!grouped.has(label)) grouped.set(label, []);
+    grouped.get(label)!.push(item);
+  }
 
   return (
     <div className="space-y-5">
@@ -35,49 +67,59 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="p-3">
               <CardDescription className="text-xs">
-                No upcoming games scheduled.
+                No games in the next 2 weeks.
               </CardDescription>
             </CardHeader>
           </Card>
         ) : (
-          <div className="space-y-2">
-            {upcoming.map((item) => (
-              <Link
-                key={item.match.id}
-                href={`/dashboard/organizations/${item.org.slug}/leagues/${item.league.slug}`}
-                className="block"
-              >
-                <Card className="hover:bg-accent/50 transition-colors">
-                  <CardHeader className="p-3">
-                    <div className="flex items-center justify-between">
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <CardTitle className="text-sm truncate">
-                            {item.team.name}
-                          </CardTitle>
-                          <span className="text-xs text-muted-foreground">
-                            vs
-                          </span>
-                          <span className="text-sm font-medium truncate">
-                            {item.opponent.name}
-                          </span>
-                        </div>
-                        <CardDescription className="text-xs mt-0.5">
-                          {item.league.name} &middot; {item.isHome ? "Home" : "Away"}
-                        </CardDescription>
-                      </div>
-                      <div className="text-right shrink-0 ml-2">
-                        <div className="text-xs font-medium">
-                          {formatDate(item.match.scheduledAt)}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {formatTime(item.match.scheduledAt)}
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </Link>
+          <div className="space-y-4">
+            {[...grouped.entries()].map(([weekLabel, games]) => (
+              <div key={weekLabel}>
+                <h3 className="text-xs font-medium text-muted-foreground mb-1.5">
+                  {weekLabel}
+                </h3>
+                <div className="space-y-2">
+                  {games.map((item) => (
+                    <Link
+                      key={item.match.id}
+                      href={`/dashboard/organizations/${item.org.slug}/leagues/${item.league.slug}`}
+                      className="block"
+                    >
+                      <Card className="hover:bg-accent/50 transition-colors">
+                        <CardHeader className="p-3">
+                          <div className="flex items-center justify-between">
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <CardTitle className="text-sm truncate">
+                                  {item.team.name}
+                                </CardTitle>
+                                <span className="text-xs text-muted-foreground">
+                                  vs
+                                </span>
+                                <span className="text-sm font-medium truncate">
+                                  {item.opponent.name}
+                                </span>
+                              </div>
+                              <CardDescription className="text-xs mt-0.5">
+                                {item.league.name} &middot;{" "}
+                                {item.isHome ? "Home" : "Away"}
+                              </CardDescription>
+                            </div>
+                            <div className="text-right shrink-0 ml-2">
+                              <div className="text-xs font-medium">
+                                {formatDate(item.match.scheduledAt)}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {formatTime(item.match.scheduledAt)}
+                              </div>
+                            </div>
+                          </div>
+                        </CardHeader>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
