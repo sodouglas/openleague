@@ -12,10 +12,12 @@ export default function OrganizationsPage() {
           Organizations you belong to
         </p>
       </div>
-      <div className="grid gap-2 md:grid-cols-2">
-        {orgs.map((org) => (
-          <OrgCard key={org.id} org={org} />
-        ))}
+      <div className="@container">
+        <div className="grid gap-2 @lg:grid-cols-2">
+          {orgs.map((org) => (
+            <OrgCard key={org.id} org={org} />
+          ))}
+        </div>
       </div>
     </div>
   );

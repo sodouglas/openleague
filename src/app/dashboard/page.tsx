@@ -141,7 +141,8 @@ export default function DashboardPage() {
               <ChevronRight className="h-3 w-3" />
             </Link>
           </div>
-          <div className="grid gap-2 md:grid-cols-2">
+          <div className="@container">
+          <div className="grid gap-2 @lg:grid-cols-2">
             {teams.map((team) => {
               const standing = getTeamStanding(team.id, team.league.id);
               const lastGame = getLastResult(team.id);
@@ -238,6 +239,7 @@ export default function DashboardPage() {
                 </Link>
               );
             })}
+          </div>
           </div>
         </section>
       )}

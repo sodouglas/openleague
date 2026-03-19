@@ -73,10 +73,12 @@ export default async function OrgOverviewPage({
             </Button>
           </Link>
         </div>
-        <div className="grid gap-2 md:grid-cols-2">
-          {leagues.slice(0, 4).map((league) => (
-            <LeagueCard key={league.id} league={league} orgSlug={orgSlug} />
-          ))}
+        <div className="@container">
+          <div className="grid gap-2 @lg:grid-cols-2">
+            {leagues.slice(0, 4).map((league) => (
+              <LeagueCard key={league.id} league={league} orgSlug={orgSlug} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ export function LeagueTabs({
   matches,
   rounds,
   orgSlug,
+  defaultTab,
 }: {
   league: League;
   teams: Team[];
@@ -21,6 +22,7 @@ export function LeagueTabs({
   matches: Match[];
   rounds: number[];
   orgSlug: string;
+  defaultTab?: "standings" | "schedule" | "teams";
 }) {
   const basePath = `/dashboard/organizations/${orgSlug}/leagues/${league.slug}`;
   const hasStandings = standings.length > 0;
@@ -30,7 +32,7 @@ export function LeagueTabs({
     league.bracketType === "double_elimination";
 
   return (
-    <Tabs defaultValue={hasStandings ? "standings" : "schedule"}>
+    <Tabs defaultValue={defaultTab ?? (hasStandings ? "standings" : "schedule")}>
       <TabsList variant="line">
         <TabsTrigger value="standings">Standings</TabsTrigger>
         <TabsTrigger value="schedule">Schedule</TabsTrigger>
@@ -76,14 +78,16 @@ export function LeagueTabs({
         <p className="text-xs text-muted-foreground mb-2">
           {teams.length}/{league.maxTeams} teams
         </p>
-        <div className="grid gap-2 md:grid-cols-2">
-          {teams.map((team) => (
-            <TeamCard
-              key={team.id}
-              team={team}
-              href={`${basePath}/teams/${team.id}`}
-            />
-          ))}
+        <div className="@container">
+          <div className="grid gap-2 @lg:grid-cols-2">
+            {teams.map((team) => (
+              <TeamCard
+                key={team.id}
+                team={team}
+                href={`${basePath}/teams/${team.id}`}
+              />
+            ))}
+          </div>
         </div>
       </TabsContent>
 
