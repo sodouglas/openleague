@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OpenLeague
+
+Open-source recreational sports league management platform. Create leagues, manage teams, schedule matches, and track standings.
+
+**Status**: Static prototype with seed data. No auth or database — UI only.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router, TypeScript, static export)
+- **UI**: shadcn/ui + Tailwind CSS
+- **Data**: Hardcoded TypeScript seed data
+- **Deployment**: GitHub Pages
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+Static output goes to `out/`.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/           # Pages (App Router)
+├── components/    # UI and feature components
+├── data/          # Seed data and lookup helpers
+└── lib/           # Shared utilities
+docs/
+├── competitive-analysis.md
+├── roles-privileges.md
+└── implementation-plan.md
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Seed Data
 
-## Deploy on Vercel
+The prototype ships with two organizations:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **NYU Intramurals** — 3 leagues (basketball, soccer, volleyball), 35 users, full match schedule and standings
+- **Acme Corp Rec League** — 1 league (softball), 5 users
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Pages
+
+| Route | Description |
+|---|---|
+| `/` | Landing page |
+| `/login` | Login mockup (non-functional) |
+| `/dashboard` | Dashboard home |
+| `/dashboard/organizations` | Organization list |
+| `/dashboard/organizations/[slug]` | Org overview |
+| `/dashboard/organizations/[slug]/members` | Org members |
+| `/dashboard/organizations/[slug]/leagues` | League list |
+| `/dashboard/organizations/[slug]/leagues/[slug]` | League overview + standings |
+| `.../leagues/[slug]/teams` | Teams list |
+| `.../leagues/[slug]/teams/[id]` | Team roster |
+| `.../leagues/[slug]/schedule` | Match schedule |
+| `.../leagues/[slug]/standings` | Full standings |
+| `/dashboard/join` | Join league (UI only) |
+| `/dashboard/my-teams` | Player's teams |
+
+## License
+
+MIT
