@@ -207,11 +207,7 @@ export default function DashboardPage() {
                               {team.name}
                             </CardTitle>
                             <div className="flex items-center gap-2 shrink-0 ml-2">
-                              {team.memberRole === "captain" && (
-                                <Badge variant="outline" className="text-xs">
-                                  Cpt
-                                </Badge>
-                              )}
+
                               <Badge
                                 variant={
                                   team.league.status === "in_progress"

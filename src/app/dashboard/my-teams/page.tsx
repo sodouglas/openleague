@@ -85,11 +85,7 @@ export default function MyTeamsPage() {
                         </CardDescription>
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                        {team.memberRole === "captain" && (
-                          <Badge variant="outline" className="text-xs">
-                            Cpt
-                          </Badge>
-                        )}
+
                         <Badge
                           variant={
                             team.league.status === "in_progress"
