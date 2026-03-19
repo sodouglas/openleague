@@ -17,14 +17,14 @@ export function DiptychShell({ children }: { children: ReactNode }) {
     <main
       className={cn(
         "flex-1 grid overflow-hidden transition-[grid-template-columns] duration-200",
-        showPane ? "grid-cols-[1fr_1fr]" : "grid-cols-[1fr]"
+        showPane ? "grid-cols-[1fr_1fr] gap-px bg-border" : "grid-cols-[1fr]"
       )}
     >
-      <div className="min-h-0 overflow-y-auto p-3 pb-16 md:pb-3">
+      <div className="min-h-0 overflow-y-auto p-3 pb-16 md:pb-3 bg-background">
         <LinkInterceptor onNavigate={open}>{children}</LinkInterceptor>
       </div>
       {showPane && (
-        <div className="min-h-0 overflow-y-auto">
+        <div className="min-h-0 overflow-y-auto bg-background">
           <LinkInterceptor onNavigate={push}>
             <DetailPane />
           </LinkInterceptor>

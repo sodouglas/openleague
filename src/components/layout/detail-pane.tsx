@@ -47,7 +47,7 @@ export function DetailPane() {
   const title = getPaneTitle(path);
 
   return (
-    <div className="flex flex-col h-full border-l">
+    <div className="flex flex-col h-full">
       <div className="flex items-center gap-1 px-3 py-2 border-b shrink-0">
         {canGoBack && (
           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={back}>
