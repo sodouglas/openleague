@@ -7,10 +7,22 @@ import {
   getLastResult,
   getTeamStanding,
   getTeamById,
+  getRounds,
 } from "@/data";
 import { Calendar, Swords, TrendingUp, ChevronRight } from "lucide-react";
 import { formatDate, formatTime } from "@/lib/formatting";
 import Link from "next/link";
+
+function getGameTypeLabel(leagueId: string, bracketType: string, round: number): string {
+  if (bracketType === "round_robin") return "Regular Season";
+  const rounds = getRounds(leagueId);
+  const lastRound = Math.max(...rounds);
+  const diff = lastRound - round;
+  if (diff === 0) return "Playoffs · Final";
+  if (diff === 1) return "Playoffs · Semifinals";
+  if (diff === 2) return "Playoffs · Quarterfinals";
+  return `Playoffs · Round ${round}`;
+}
 
 function getWeekLabel(date: Date, now: Date): string {
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -120,7 +132,8 @@ export default function DashboardPage() {
                                 </div>
                                 <CardDescription className="text-xs mt-0.5">
                                   {item.league.name} &middot;{" "}
-                                  {item.isHome ? "Home" : "Away"}
+                                  {item.isHome ? "Home" : "Away"} &middot;{" "}
+                                  {getGameTypeLabel(item.league.id, item.league.bracketType, item.match.round)}
                                 </CardDescription>
                               </div>
                             </div>
