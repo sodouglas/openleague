@@ -2,6 +2,8 @@
 
 Open-source recreational sports league management platform. Create leagues, manage teams, schedule matches, and track standings.
 
+yoyo was here
+
 **Status**: Static prototype with seed data. No auth or database — UI only.
 
 ## Tech Stack
