@@ -79,45 +79,56 @@ export default function DashboardPage() {
                   {weekLabel}
                 </h3>
                 <div className="space-y-2">
-                  {games.map((item) => (
-                    <Link
-                      key={item.match.id}
-                      href={`/dashboard/organizations/${item.org.slug}/leagues/${item.league.slug}`}
-                      className="block"
-                    >
-                      <Card className="hover:bg-accent/50 transition-colors">
-                        <CardHeader className="p-3">
-                          <div className="flex items-center justify-between">
-                            <div className="min-w-0">
-                              <div className="flex items-center gap-1.5">
-                                <CardTitle className="text-sm truncate">
-                                  {item.team.name}
-                                </CardTitle>
-                                <span className="text-xs text-muted-foreground">
-                                  vs
+                  {games.map((item) => {
+                    const gameDate = new Date(item.match.scheduledAt);
+                    const dayAbbr = gameDate
+                      .toLocaleDateString("en-US", { weekday: "short" })
+                      .toUpperCase();
+                    const dayNum = gameDate.getDate();
+
+                    return (
+                      <Link
+                        key={item.match.id}
+                        href={`/dashboard/organizations/${item.org.slug}/leagues/${item.league.slug}`}
+                        className="block"
+                      >
+                        <Card className="hover:bg-accent/50 transition-colors border-l-[3px] border-l-foreground/20">
+                          <CardHeader className="p-3">
+                            <div className="flex items-center gap-3">
+                              <div className="flex flex-col items-center justify-center shrink-0 w-10 text-center">
+                                <span className="text-[10px] uppercase tracking-wide text-muted-foreground leading-none">
+                                  {dayAbbr}
                                 </span>
-                                <span className="text-sm font-medium truncate">
-                                  {item.opponent.name}
+                                <span className="text-lg font-semibold leading-none mt-0.5">
+                                  {dayNum}
+                                </span>
+                                <span className="text-[10px] text-muted-foreground leading-none mt-1">
+                                  {formatTime(item.match.scheduledAt)}
                                 </span>
                               </div>
-                              <CardDescription className="text-xs mt-0.5">
-                                {item.league.name} &middot;{" "}
-                                {item.isHome ? "Home" : "Away"}
-                              </CardDescription>
-                            </div>
-                            <div className="text-right shrink-0 ml-2">
-                              <div className="text-xs font-medium">
-                                {formatDate(item.match.scheduledAt)}
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <CardTitle className="text-sm truncate">
+                                    {item.team.name}
+                                  </CardTitle>
+                                  <span className="text-xs text-muted-foreground">
+                                    vs
+                                  </span>
+                                  <span className="text-sm font-medium truncate">
+                                    {item.opponent.name}
+                                  </span>
+                                </div>
+                                <CardDescription className="text-xs mt-0.5">
+                                  {item.league.name} &middot;{" "}
+                                  {item.isHome ? "Home" : "Away"}
+                                </CardDescription>
                               </div>
-                              <div className="text-xs text-muted-foreground">
-                                {formatTime(item.match.scheduledAt)}
-                              </div>
                             </div>
-                          </div>
-                        </CardHeader>
-                      </Card>
-                    </Link>
-                  ))}
+                          </CardHeader>
+                        </Card>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -170,69 +181,77 @@ export default function DashboardPage() {
                 >
                   <Card className="hover:bg-accent/50 transition-colors">
                     <CardHeader className="p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="min-w-0">
-                          <CardTitle className="text-sm truncate">
-                            {team.name}
-                          </CardTitle>
+                      <div className="flex items-center gap-3">
+                        <div className="flex flex-col items-center justify-center rounded-md bg-muted px-2.5 py-1.5 shrink-0 min-w-14">
+                          {standing ? (
+                            <>
+                              <span className="text-base font-semibold tabular-nums leading-none">
+                                {standing.wins}-{standing.losses}
+                                {standing.ties > 0 ? `-${standing.ties}` : ""}
+                              </span>
+                              <span className="text-[10px] text-muted-foreground mt-1">
+                                #{standing.rank}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-[10px] font-medium text-muted-foreground uppercase">
+                              {team.league.status === "registration"
+                                ? "Reg"
+                                : "—"}
+                            </span>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-sm truncate">
+                              {team.name}
+                            </CardTitle>
+                            <div className="flex items-center gap-2 shrink-0 ml-2">
+                              {team.memberRole === "captain" && (
+                                <Badge variant="outline" className="text-xs">
+                                  Cpt
+                                </Badge>
+                              )}
+                              <Badge
+                                variant={
+                                  team.league.status === "in_progress"
+                                    ? "default"
+                                    : "secondary"
+                                }
+                                className="text-xs"
+                              >
+                                {team.league.status === "in_progress"
+                                  ? "Active"
+                                  : team.league.status === "registration"
+                                    ? "Reg"
+                                    : "Done"}
+                              </Badge>
+                            </div>
+                          </div>
                           <CardDescription className="text-xs mt-0.5">
                             {team.league.name} &middot; {team.org.name}
                           </CardDescription>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0 ml-2">
-                          {team.memberRole === "captain" && (
-                            <Badge variant="outline" className="text-xs">
-                              Cpt
-                            </Badge>
+                          {lastGame && lastOpponent && (
+                            <div className="flex items-center gap-1 mt-1.5 text-xs text-muted-foreground">
+                              <Swords className="h-3 w-3" />
+                              <span
+                                className={
+                                  lastGameTied
+                                    ? ""
+                                    : isLastGameWin
+                                      ? "text-green-600"
+                                      : "text-red-600"
+                                }
+                              >
+                                {lastGameTied ? "T" : isLastGameWin ? "W" : "L"}
+                              </span>
+                              {lastGame.homeTeamId === team.id
+                                ? `${lastGame.homeScore}-${lastGame.awayScore}`
+                                : `${lastGame.awayScore}-${lastGame.homeScore}`}{" "}
+                              vs {lastOpponent.name}
+                            </div>
                           )}
-                          <Badge
-                            variant={
-                              team.league.status === "in_progress"
-                                ? "default"
-                                : "secondary"
-                            }
-                            className="text-xs"
-                          >
-                            {team.league.status === "in_progress"
-                              ? "Active"
-                              : team.league.status === "registration"
-                                ? "Reg"
-                                : "Done"}
-                          </Badge>
                         </div>
-                      </div>
-
-                      {/* Record + Last Result */}
-                      <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                        {standing && (
-                          <span className="font-medium text-foreground">
-                            {standing.wins}-{standing.losses}
-                            {standing.ties > 0 ? `-${standing.ties}` : ""}
-                            <span className="text-muted-foreground font-normal ml-1">
-                              #{standing.rank}
-                            </span>
-                          </span>
-                        )}
-                        {lastGame && lastOpponent && (
-                          <span className="flex items-center gap-1">
-                            <Swords className="h-3 w-3" />
-                            <span
-                              className={
-                                lastGameTied
-                                  ? ""
-                                  : isLastGameWin
-                                    ? "text-green-600"
-                                    : "text-red-600"
-                              }
-                            >
-                              {lastGameTied ? "T" : isLastGameWin ? "W" : "L"}
-                            </span>
-                            {lastGame.homeTeamId === team.id
-                              ? `${lastGame.homeScore}-${lastGame.awayScore}`
-                              : `${lastGame.awayScore}-${lastGame.homeScore}`}
-                            vs {lastOpponent.name}
-                          </span>
-                        )}
                       </div>
                     </CardHeader>
                   </Card>
