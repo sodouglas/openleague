@@ -71,6 +71,16 @@ export const matches: Match[] = [
   { id: "m42", leagueId: "lg5", homeTeamId: "t24", awayTeamId: "t25", round: 5, status: "scheduled", scheduledAt: "2026-03-29T11:00:00" },
   { id: "m43", leagueId: "lg5", homeTeamId: "t26", awayTeamId: "t27", round: 5, status: "scheduled", scheduledAt: "2026-03-29T12:00:00" },
 
+  // NYU Soccer single elimination (lg2) — 6 teams
+  // Round 1 (Quarterfinals) — seeds 3-6 play, seeds 1-2 get byes
+  { id: "m59", leagueId: "lg2", homeTeamId: "t11", awayTeamId: "t14", round: 1, homeScore: 3, awayScore: 1, status: "completed", scheduledAt: "2026-03-01T14:00:00" },
+  { id: "m60", leagueId: "lg2", homeTeamId: "t12", awayTeamId: "t13", round: 1, homeScore: 2, awayScore: 4, status: "completed", scheduledAt: "2026-03-01T16:00:00" },
+  // Round 2 (Semifinals) — winners vs bye teams
+  { id: "m61", leagueId: "lg2", homeTeamId: "t9", awayTeamId: "t13", round: 2, homeScore: 2, awayScore: 1, status: "completed", scheduledAt: "2026-03-08T14:00:00" },
+  { id: "m62", leagueId: "lg2", homeTeamId: "t10", awayTeamId: "t11", round: 2, homeScore: 0, awayScore: 2, status: "completed", scheduledAt: "2026-03-08T16:00:00" },
+  // Round 3 (Final)
+  { id: "m63", leagueId: "lg2", homeTeamId: "t9", awayTeamId: "t11", round: 3, status: "scheduled", scheduledAt: "2026-03-22T15:00:00" },
+
   // Chelsea Piers Soccer (lg6) — 6 teams round robin
   // Round 1 — completed
   { id: "m44", leagueId: "lg6", homeTeamId: "t29", awayTeamId: "t30", round: 1, homeScore: 3, awayScore: 1, status: "completed", scheduledAt: "2026-02-07T14:00:00" },

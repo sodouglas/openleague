@@ -1,18 +1,17 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   getOrgBySlug,
   getLeagueBySlug,
   getTeamsByLeague,
   getStandingsByLeague,
   getMatchesByLeague,
+  getRounds,
   organizations,
   leagues,
 } from "@/data";
-import { StandingsTable } from "@/components/league/standings-table";
-import { Users, Calendar, ListOrdered, ClipboardList } from "lucide-react";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { LeagueTabs } from "@/components/league/league-tabs";
 
 const statusColors: Record<string, string> = {
   registration: "bg-blue-100 text-blue-800",
@@ -55,11 +54,19 @@ export default async function LeagueOverviewPage({
 
   const leagueTeams = getTeamsByLeague(league.id);
   const leagueStandings = getStandingsByLeague(league.id);
-  const leagueMatches = getMatchesByLeague(league.id);
-  const basePath = `/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}`;
+  const allMatches = getMatchesByLeague(league.id);
+  const rounds = getRounds(league.id);
 
   return (
     <div className="space-y-4">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+          { label: league.name },
+        ]}
+      />
+
       <div>
         <div className="flex items-center gap-2">
           <h1 className="text-lg font-semibold">{league.name}</h1>
@@ -81,60 +88,14 @@ export default async function LeagueOverviewPage({
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
-        <Link href={`${basePath}/teams`}>
-          <Card className="hover:bg-accent/50 transition-colors">
-            <CardHeader className="p-3">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                <CardDescription className="text-xs">Teams</CardDescription>
-              </div>
-              <CardTitle className="text-lg">
-                {leagueTeams.length}/{league.maxTeams}
-              </CardTitle>
-            </CardHeader>
-          </Card>
-        </Link>
-        <Link href={`${basePath}/schedule`}>
-          <Card className="hover:bg-accent/50 transition-colors">
-            <CardHeader className="p-3">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <CardDescription className="text-xs">Matches</CardDescription>
-              </div>
-              <CardTitle className="text-lg">{leagueMatches.length}</CardTitle>
-            </CardHeader>
-          </Card>
-        </Link>
-        <Link href={`${basePath}/standings`}>
-          <Card className="hover:bg-accent/50 transition-colors">
-            <CardHeader className="p-3">
-              <div className="flex items-center gap-2">
-                <ListOrdered className="h-4 w-4 text-muted-foreground" />
-                <CardDescription className="text-xs">Standings</CardDescription>
-              </div>
-              <CardTitle className="text-lg">
-                {leagueStandings.length > 0 ? "View" : "—"}
-              </CardTitle>
-            </CardHeader>
-          </Card>
-        </Link>
-      </div>
-
-      {leagueStandings.length > 0 && (
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-medium">Standings</h2>
-            <Link
-              href={`${basePath}/standings`}
-              className="text-xs text-muted-foreground hover:text-foreground"
-            >
-              View full
-            </Link>
-          </div>
-          <StandingsTable standings={leagueStandings} />
-        </div>
-      )}
+      <LeagueTabs
+        league={league}
+        teams={leagueTeams}
+        standings={leagueStandings}
+        matches={allMatches}
+        rounds={rounds}
+        orgSlug={orgSlug}
+      />
     </div>
   );
 }

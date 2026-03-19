@@ -11,6 +11,7 @@ import {
   teams,
 } from "@/data";
 import { RosterList } from "@/components/team/roster-list";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 export function generateStaticParams() {
   return teams.map((team) => {
@@ -40,6 +41,15 @@ export default async function TeamDetailPage({
 
   return (
     <div className="space-y-3">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+          { label: league.name, href: `/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}` },
+          { label: "Teams", href: `/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}/teams` },
+          { label: team.name },
+        ]}
+      />
       <div>
         <h1 className="text-lg font-semibold">{team.name}</h1>
         <p className="text-sm text-muted-foreground">

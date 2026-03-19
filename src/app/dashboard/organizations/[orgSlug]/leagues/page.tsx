@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getOrgBySlug, getLeaguesByOrg, organizations } from "@/data";
 import { LeagueCard } from "@/components/league/league-card";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 export function generateStaticParams() {
   return organizations.map((org) => ({ orgSlug: org.slug }));
@@ -19,6 +20,13 @@ export default async function LeaguesPage({
 
   return (
     <div className="space-y-3">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+          { label: "Leagues" },
+        ]}
+      />
       <div>
         <h1 className="text-lg font-semibold">{org.name} — Leagues</h1>
         <p className="text-sm text-muted-foreground">

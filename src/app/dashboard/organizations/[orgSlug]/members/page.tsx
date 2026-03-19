@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { getOrgBySlug, getOrgMembers, getUserById, organizations } from "@/data";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 const roleColors: Record<string, string> = {
   owner: "bg-amber-100 text-amber-800",
@@ -33,6 +34,13 @@ export default async function OrgMembersPage({
 
   return (
     <div className="space-y-3">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+          { label: "Members" },
+        ]}
+      />
       <div>
         <h1 className="text-lg font-semibold">{org.name} — Members</h1>
         <p className="text-sm text-muted-foreground">

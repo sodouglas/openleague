@@ -7,6 +7,7 @@ import {
   leagues,
 } from "@/data";
 import { StandingsTable } from "@/components/league/standings-table";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 export function generateStaticParams() {
   return leagues.map((league) => {
@@ -31,6 +32,14 @@ export default async function StandingsPage({
 
   return (
     <div className="space-y-3">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+          { label: league.name, href: `/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}` },
+          { label: "Standings" },
+        ]}
+      />
       <div>
         <h1 className="text-lg font-semibold">{league.name} — Standings</h1>
       </div>

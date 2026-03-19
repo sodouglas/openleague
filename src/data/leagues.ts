@@ -23,7 +23,7 @@ export const leagues: League[] = [
     season: "Spring 2026",
     maxTeams: 8,
     bracketType: "single_elimination",
-    status: "registration",
+    status: "in_progress",
     inviteCode: "NYU-SC-S26",
     teams: 6,
   },

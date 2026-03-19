@@ -98,3 +98,51 @@ export function getRounds(leagueId: string): number[] {
   const leagueMatches = matches.filter((m) => m.leagueId === leagueId);
   return [...new Set(leagueMatches.map((m) => m.round))].sort((a, b) => a - b);
 }
+
+export function getNextMatch(teamId: string) {
+  return matches
+    .filter(
+      (m) =>
+        (m.homeTeamId === teamId || m.awayTeamId === teamId) &&
+        m.status === "scheduled"
+    )
+    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime())[0];
+}
+
+export function getLastResult(teamId: string) {
+  return matches
+    .filter(
+      (m) =>
+        (m.homeTeamId === teamId || m.awayTeamId === teamId) &&
+        m.status === "completed"
+    )
+    .sort((a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime())[0];
+}
+
+export function getTeamStanding(teamId: string, leagueId: string) {
+  return standings.find((s) => s.teamId === teamId && s.leagueId === leagueId);
+}
+
+export function getUserUpcomingMatches(userId: string) {
+  const userTeams = getUserTeams(userId);
+  return userTeams
+    .map((team) => {
+      const next = getNextMatch(team.id);
+      if (!next) return null;
+      const opponentId = next.homeTeamId === team.id ? next.awayTeamId : next.homeTeamId;
+      const opponent = teams.find((t) => t.id === opponentId)!;
+      const league = leagues.find((l) => l.id === team.leagueId)!;
+      const org = organizations.find((o) => o.id === league.orgId)!;
+      const isHome = next.homeTeamId === team.id;
+      return { match: next, team, opponent, league, org, isHome };
+    })
+    .filter(Boolean)
+    .sort((a, b) => new Date(a!.match.scheduledAt).getTime() - new Date(b!.match.scheduledAt).getTime()) as {
+      match: typeof matches[number];
+      team: typeof userTeams[number];
+      opponent: typeof teams[number];
+      league: typeof leagues[number];
+      org: typeof organizations[number];
+      isHome: boolean;
+    }[];
+}

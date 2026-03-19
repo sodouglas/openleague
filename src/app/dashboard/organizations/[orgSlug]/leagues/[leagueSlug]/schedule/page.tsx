@@ -8,6 +8,7 @@ import {
   leagues,
 } from "@/data";
 import { MatchCard } from "@/components/match/match-card";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 export function generateStaticParams() {
   return leagues.map((league) => {
@@ -31,9 +32,17 @@ export default async function SchedulePage({
   const allMatches = getMatchesByLeague(league.id);
   const rounds = getRounds(league.id);
 
+  const crumbs = [
+    { label: "Organizations", href: "/dashboard/organizations" },
+    { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+    { label: league.name, href: `/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}` },
+    { label: "Schedule" },
+  ];
+
   if (allMatches.length === 0) {
     return (
       <div className="space-y-3">
+        <Breadcrumbs items={crumbs} />
         <div>
           <h1 className="text-lg font-semibold">{league.name} — Schedule</h1>
         </div>
@@ -46,6 +55,7 @@ export default async function SchedulePage({
 
   return (
     <div className="space-y-4">
+      <Breadcrumbs items={crumbs} />
       <div>
         <h1 className="text-lg font-semibold">{league.name} — Schedule</h1>
         <p className="text-sm text-muted-foreground">

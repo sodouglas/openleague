@@ -7,6 +7,7 @@ import {
   leagues,
 } from "@/data";
 import { TeamCard } from "@/components/team/team-card";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 
 export function generateStaticParams() {
   return leagues.map((league) => {
@@ -31,6 +32,14 @@ export default async function TeamsPage({
 
   return (
     <div className="space-y-3">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name, href: `/dashboard/organizations/${orgSlug}` },
+          { label: league.name, href: `/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}` },
+          { label: "Teams" },
+        ]}
+      />
       <div>
         <h1 className="text-lg font-semibold">{league.name} — Teams</h1>
         <p className="text-sm text-muted-foreground">

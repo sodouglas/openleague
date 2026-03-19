@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getOrgBySlug, getOrgMembers, getLeaguesByOrg, organizations } from "@/data";
 import { LeagueCard } from "@/components/league/league-card";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Users, Trophy, Settings } from "lucide-react";
 
 export function generateStaticParams() {
@@ -25,6 +26,12 @@ export default async function OrgOverviewPage({
 
   return (
     <div className="space-y-4">
+      <Breadcrumbs
+        items={[
+          { label: "Organizations", href: "/dashboard/organizations" },
+          { label: org.name },
+        ]}
+      />
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-lg font-semibold">{org.name}</h1>
