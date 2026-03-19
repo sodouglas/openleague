@@ -103,8 +103,7 @@ export default function MyTeamsPage() {
                     {standing && (
                       <div className="mt-2 text-xs">
                         <span className="font-medium">
-                          {standing.wins}-{standing.losses}
-                          {standing.ties > 0 ? `-${standing.ties}` : ""}
+                          {standing.wins}-{standing.losses}-{standing.ties}
                         </span>
                         <span className="text-muted-foreground ml-1">
                           #{standing.rank} in league

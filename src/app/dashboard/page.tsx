@@ -186,8 +186,7 @@ export default function DashboardPage() {
                           {standing ? (
                             <>
                               <span className="text-base font-semibold tabular-nums leading-none">
-                                {standing.wins}-{standing.losses}
-                                {standing.ties > 0 ? `-${standing.ties}` : ""}
+                                {standing.wins}-{standing.losses}-{standing.ties}
                               </span>
                               <span className="text-[10px] text-muted-foreground mt-1">
                                 #{standing.rank}
