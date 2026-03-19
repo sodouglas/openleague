@@ -125,6 +125,9 @@ export const teamMembers: TeamMember[] = [
   { userId: "u28", teamId: "t8", role: "player", status: "active" },
   { userId: "u29", teamId: "t8", role: "player", status: "active" },
 
+  // Purple Haze FC (t9) — NYU Soccer single elimination
+  { userId: "u1", teamId: "t9", role: "player", status: "active" },
+
   // Bed-Stuy Buckets (t23) — Brooklyn Pickup Basketball
   { userId: "u1", teamId: "t23", role: "captain", status: "active" },
   { userId: "u42", teamId: "t23", role: "player", status: "active" },
