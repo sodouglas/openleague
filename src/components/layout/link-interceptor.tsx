@@ -2,6 +2,7 @@
 
 import type { ReactNode, MouseEvent } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { parseRoute } from "@/lib/route-parser";
 
 export function LinkInterceptor({
   children,
@@ -35,6 +36,10 @@ export function LinkInterceptor({
 
     // Only intercept org/league/team drill-down links
     if (!canonicalPath.startsWith("/dashboard/organizations/")) return;
+
+    // Let org-overview links navigate normally — org pages are full pages
+    const parsed = parseRoute(canonicalPath);
+    if (!parsed || parsed.type === "org-overview") return;
 
     e.preventDefault();
     e.stopPropagation();
