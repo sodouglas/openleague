@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -9,7 +10,13 @@ import {
 import { Standing } from "@/data/types";
 import { getTeamById } from "@/data";
 
-export function StandingsTable({ standings }: { standings: Standing[] }) {
+export function StandingsTable({
+  standings,
+  basePath,
+}: {
+  standings: Standing[];
+  basePath?: string;
+}) {
   return (
     <Table>
       <TableHeader>
@@ -26,10 +33,22 @@ export function StandingsTable({ standings }: { standings: Standing[] }) {
       <TableBody>
         {standings.map((s) => {
           const team = getTeamById(s.teamId);
+          const name = team?.name ?? "—";
           return (
             <TableRow key={s.teamId}>
               <TableCell className="text-xs font-medium">{s.rank}</TableCell>
-              <TableCell className="text-xs">{team?.name ?? "—"}</TableCell>
+              <TableCell className="text-xs">
+                {basePath && team ? (
+                  <Link
+                    href={`${basePath}/teams/${team.id}`}
+                    className="hover:underline"
+                  >
+                    {name}
+                  </Link>
+                ) : (
+                  name
+                )}
+              </TableCell>
               <TableCell className="text-xs text-center">{s.wins}</TableCell>
               <TableCell className="text-xs text-center">{s.losses}</TableCell>
               <TableCell className="text-xs text-center">{s.ties}</TableCell>

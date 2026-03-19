@@ -45,7 +45,7 @@ export default async function StandingsPage({
       </div>
 
       {leagueStandings.length > 0 ? (
-        <StandingsTable standings={leagueStandings} />
+        <StandingsTable standings={leagueStandings} basePath={`/dashboard/organizations/${orgSlug}/leagues/${leagueSlug}`} />
       ) : (
         <p className="text-sm text-muted-foreground">
           No standings available yet.

@@ -40,7 +40,7 @@ export function LeagueTabs({
 
       <TabsContent value="standings" className="mt-3">
         {hasStandings ? (
-          <StandingsTable standings={standings} />
+          <StandingsTable standings={standings} basePath={basePath} />
         ) : (
           <p className="text-sm text-muted-foreground py-4">
             No standings available yet.
